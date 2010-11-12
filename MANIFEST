@@ -1,6 +1,4 @@
 ChangeLog
-lib/perlpod.pod
-lib/perlpodspec.pod
 lib/Pod/Simple.pm
 lib/Pod/Simple.pod
 lib/Pod/Simple/BlackBox.pm
@@ -32,8 +30,8 @@ lib/Pod/Simple/TranscodeSmart.pm
 lib/Pod/Simple/XHTML.pm
 lib/Pod/Simple/XMLOutStream.pm
 Makefile.PL
-MANIFEST
-META.yml			Module meta-data (added by MakeMaker)
+MANIFEST			This list of files
+MANIFEST.SKIP
 README
 t/00about.t
 t/20_skip.t
@@ -179,3 +177,4 @@ t/x_nixer.t
 t/xhtml01.t
 t/xhtml05.t
 t/xhtml10.t
+META.yml                                 Module meta-data (added by MakeMaker)
