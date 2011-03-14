@@ -125,6 +125,7 @@ t/junk1o.txt
 t/junk2.pod
 t/junk2o.txt
 t/linkclas.t
+t/output.t
 t/perlcyg.pod
 t/perlcygo.txt
 t/perlfaq.pod
