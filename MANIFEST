@@ -32,8 +32,6 @@ lib/Pod/Simple/XMLOutStream.pm
 Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
-META.json
-META.yml
 README
 t/00about.t
 t/20_skip.t
@@ -104,10 +102,14 @@ t/corpus2/polish_utf8_bom.xml
 t/corpus2/polish_utf8_bom2.txt
 t/corpus2/polish_utf8_bom2.xml
 t/corpus2/README
+t/emptylists.t
 t/encod01.t
 t/encod02.t
 t/encod03.t
 t/end_over.t
+t/eol.t
+t/eol2.t
+t/fake-closers.t
 t/fcodes.t
 t/fcodes_e.t
 t/fcodes_l.t
@@ -180,3 +182,6 @@ t/x_nixer.t
 t/xhtml01.t
 t/xhtml05.t
 t/xhtml10.t
+t/xhtml15.t
+META.yml                                 Module YAML meta-data (added by MakeMaker)
+META.json                                Module JSON meta-data (added by MakeMaker)
