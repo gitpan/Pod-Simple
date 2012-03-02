@@ -4,7 +4,7 @@
       "Allison Randal <allison@perl.org>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.58, CPAN::Meta::Converter version 2.110930001",
+   "generated_by" : "ExtUtils::MakeMaker version 6.62, CPAN::Meta::Converter version 2.120351",
    "license" : [
       "perl_5"
    ],
@@ -22,31 +22,31 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : 0
+            "ExtUtils::MakeMaker" : "0"
          }
       },
       "runtime" : {
          "requires" : {
-            "Carp" : 0,
-            "Config" : 0,
-            "Cwd" : 0,
-            "File::Basename" : 0,
-            "File::Find" : 0,
-            "File::Spec" : 0,
+            "Carp" : "0",
+            "Config" : "0",
+            "Cwd" : "0",
+            "File::Basename" : "0",
+            "File::Find" : "0",
+            "File::Spec" : "0",
             "Pod::Escapes" : "1.04",
-            "Symbol" : 0,
+            "Symbol" : "0",
             "Test" : "1.25",
-            "Test::More" : 0,
+            "Test::More" : "0",
             "Text::Wrap" : "98.112902",
-            "constant" : 0,
-            "integer" : 0,
-            "overload" : 0,
-            "strict" : 0
+            "constant" : "0",
+            "integer" : "0",
+            "overload" : "0",
+            "strict" : "0"
          }
       }
    },
@@ -63,5 +63,5 @@
          "url" : "git://github.com/theory/pod-simple.git"
       }
    },
-   "version" : "3.19"
+   "version" : "3.20"
 }
