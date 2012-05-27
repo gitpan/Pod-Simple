@@ -23,7 +23,7 @@ use integer; # vroom!
 use strict;
 use Carp ();
 use vars qw($VERSION );
-$VERSION = '3.21';
+$VERSION = '3.22';
 #use constant DEBUG => 7;
 BEGIN {
   require Pod::Simple;
@@ -400,6 +400,10 @@ sub _handle_encoding_second_level {
 
 sub _try_encoding_guess {
   my ($self,$line) = @_;
+
+  if(!$self->{'in_pod'}  and  $line !~ /^=/m) {
+    return;  # don't whine about non-ASCII bytes in code/comments
+  }
 
   return unless $line =~ /[^\x00-\x7f]/;  # Look for non-ASCII byte
 
