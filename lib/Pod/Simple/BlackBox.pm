@@ -23,7 +23,7 @@ use integer; # vroom!
 use strict;
 use Carp ();
 use vars qw($VERSION );
-$VERSION = '3.22';
+$VERSION = '3.23';
 #use constant DEBUG => 7;
 BEGIN {
   require Pod::Simple;
@@ -123,7 +123,7 @@ sub parse_lines {             # Usage: $parser->parse_lines(@lines)
       }
     }
 
-    if(!$self->{'encoding'}) {
+    if(!$self->parse_characters && !$self->{'encoding'}) {
       $self->_try_encoding_guess($line)
     }
 
@@ -179,6 +179,7 @@ sub parse_lines {             # Usage: $parser->parse_lines(@lines)
 
     # HERE WE CATCH =encoding EARLY!
     if( $line =~ m/^=encoding\s+\S+\s*$/s ) {
+      next if $self->parse_characters;   # Ignore this line
       $line = $self->_handle_encoding_line( $line );
     }
 
@@ -272,6 +273,8 @@ sub parse_lines {             # Usage: $parser->parse_lines(@lines)
 sub _handle_encoding_line {
   my($self, $line) = @_;
   
+  return if $self->parse_characters;
+
   # The point of this routine is to set $self->{'_transcoder'} as indicated.
 
   return $line unless $line =~ m/^=encoding\s+(\S+)\s*$/s;

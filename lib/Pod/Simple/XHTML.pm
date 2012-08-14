@@ -45,7 +45,7 @@ declare the output character set as UTF-8 before parsing, like so:
 package Pod::Simple::XHTML;
 use strict;
 use vars qw( $VERSION @ISA $HAS_HTML_ENTITIES );
-$VERSION = '3.22';
+$VERSION = '3.23';
 use Pod::Simple::Methody ();
 @ISA = ('Pod::Simple::Methody');
 
@@ -309,7 +309,17 @@ something like:
 
 This method handles the body of text that is marked up to be code.
 You might for instance override this to plug in a syntax highlighter.
-The base implementation just escapes the text and wraps it in C<<< <code>...</code> >>>.
+The base implementation just escapes the text.
+
+The callback methods C<start_code> and C<end_code> emits the C<code> tags
+before and after C<handle_code> is invoked, so you might want to override these
+together with C<handle_code> if this wrapping isn't suiteable.
+
+Note that the code might be broken into mulitple segments if there are
+nested formatting codes inside a C<< CE<lt>...> >> sequence.  In between the
+calls to C<handle_code> other markup tags might have been emitted in that
+case.  The same is true for verbatim sections if the C<codes_in_verbatim>
+option is turned on.
 
 =head2 accept_targets_as_html
 
@@ -332,26 +342,44 @@ sub accept_targets_as_html {
 }
 
 sub handle_text {
-    if ($_[0]{'in_code'}) {
-	return $_[0]->handle_code( $_[1] );
+    if ($_[0]{'in_code'} && @{$_[0]{'in_code'}}) {
+	return $_[0]->handle_code( $_[1], $_[0]{'in_code'}[-1] );
     }
     # escape special characters in HTML (<, >, &, etc)
-    $_[0]{'scratch'} .= $_[0]->__in_literal_xhtml_region
-                      ? $_[1]
-                      : $_[0]->encode_entities( $_[1] );
+    my $text = $_[0]->__in_literal_xhtml_region
+        ? $_[1]
+        : $_[0]->encode_entities( $_[1] );
+
+    $_[0]{'scratch'} .= $text;
+    $_[0]{htext} .= $text if $_[0]{'in_head'};
+}
+
+sub start_code {
+    $_[0]{'scratch'} .= '<code>';
+}
+
+sub end_code {
+    $_[0]{'scratch'} .= '</code>';
 }
 
 sub handle_code {
-    $_[0]{'scratch'} .= '<code>' . $_[0]->encode_entities( $_[1] ) . '</code>';
+    $_[0]{'scratch'} .= $_[0]->encode_entities( $_[1] );
 }
 
-sub start_Para     { $_[0]{'scratch'} = '<p>' }
-sub start_Verbatim { $_[0]{'scratch'} = '<pre>'; $_[0]{'in_code'} = 1; }
+sub start_Para {
+    $_[0]{'scratch'} = '<p>';
+}
 
-sub start_head1 {  $_[0]{'in_head'} = 1 }
-sub start_head2 {  $_[0]{'in_head'} = 2 }
-sub start_head3 {  $_[0]{'in_head'} = 3 }
-sub start_head4 {  $_[0]{'in_head'} = 4 }
+sub start_Verbatim {
+    $_[0]{'scratch'} = '<pre>';
+    push(@{$_[0]{'in_code'}}, 'Verbatim');
+    $_[0]->start_code($_[0]{'in_code'}[-1]);
+}
+
+sub start_head1 {  $_[0]{'in_head'} = 1; $_[0]{htext} = ''; }
+sub start_head2 {  $_[0]{'in_head'} = 2; $_[0]{htext} = ''; }
+sub start_head3 {  $_[0]{'in_head'} = 3; $_[0]{htext} = ''; }
+sub start_head4 {  $_[0]{'in_head'} = 4; $_[0]{htext} = ''; }
 
 sub start_item_number {
     $_[0]{'scratch'} = "</li>\n" if ($_[0]{'in_li'}->[-1] && pop @{$_[0]{'in_li'}});
@@ -409,8 +437,8 @@ sub end_over_text   {
 
 sub end_Para     { $_[0]{'scratch'} .= '</p>'; $_[0]->emit }
 sub end_Verbatim {
+    $_[0]->end_code(pop(@{$_[0]->{'in_code'}}));
     $_[0]{'scratch'} .= '</pre>';
-    delete $_[0]{'in_code'};
     $_[0]->emit;
 }
 
@@ -421,14 +449,14 @@ sub _end_head {
     $add = 1 unless defined $add;
     $h += $add - 1;
 
-    my $id = $_[0]->idify($_[0]{scratch});
+    my $id = $_[0]->idify($_[0]{htext});
     my $text = $_[0]{scratch};
-    $_[0]{'scratch'} = $_[0]->backlink && ($h - $add == 0) 
+    $_[0]{'scratch'} = $_[0]->backlink && ($h - $add == 0)
                          # backlinks enabled && =head1
                          ? qq{<a href="#_podtop_"><h$h id="$id">$text</h$h></a>}
                          : qq{<h$h id="$id">$text</h$h>};
     $_[0]->emit;
-    push @{ $_[0]{'to_index'} }, [$h, $id, $text];
+    push @{ $_[0]{'to_index'} }, [$h, $id, delete $_[0]{'htext'}];
 }
 
 sub end_head1       { shift->_end_head(@_); }
@@ -581,8 +609,8 @@ sub end_Document   {
 sub start_B { $_[0]{'scratch'} .= '<b>' }
 sub end_B   { $_[0]{'scratch'} .= '</b>' }
 
-sub start_C { $_[0]{'in_code'} = 1; }
-sub end_C   { delete $_[0]{'in_code'}; }
+sub start_C { push(@{$_[0]{'in_code'}}, 'C'); $_[0]->start_code($_[0]{'in_code'}[-1]); }
+sub end_C   { $_[0]->end_code(pop(@{$_[0]{'in_code'}})); }
 
 sub start_F { $_[0]{'scratch'} .= '<i>' }
 sub end_F   { $_[0]{'scratch'} .= '</i>' }
