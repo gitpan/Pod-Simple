@@ -60,6 +60,10 @@ t/corpus/encwarn01.txt
 t/corpus/encwarn01.xml
 t/corpus/encwarn02.txt
 t/corpus/encwarn02.xml
+t/corpus/encwarn03.txt
+t/corpus/encwarn03.xml
+t/corpus/encwarn04.txt
+t/corpus/encwarn04.xml
 t/corpus/fet_cont.txt
 t/corpus/fet_cont.xml
 t/corpus/fet_dup.txt
@@ -107,9 +111,11 @@ t/corpus2/polish_utf8_bom2.txt
 t/corpus2/polish_utf8_bom2.xml
 t/corpus2/README
 t/emptylists.t
+t/enc-chars.t
 t/encod01.t
 t/encod02.t
 t/encod03.t
+t/encod04.t
 t/end_over.t
 t/eol.t
 t/eol2.t
@@ -183,6 +189,7 @@ t/tiedfh.t
 t/verb_fmt.t
 t/verbatim.t
 t/x_nixer.t
+t/xhtml-bkb.t
 t/xhtml01.t
 t/xhtml05.t
 t/xhtml10.t

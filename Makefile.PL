@@ -29,7 +29,7 @@ WriteMakefile(
    ]
   },
 
-  INSTALLDIRS => $] >= 5.009003 ? 'perl' : 'site',
+  INSTALLDIRS => $] >= 5.009003 && $] <= 5.011000 ? 'perl' : 'site',
 
   LICENSE => 'perl',
   AUTHOR  => 'Allison Randal <allison@perl.org>',
@@ -37,7 +37,7 @@ WriteMakefile(
       resources => {
           repository => 'git://github.com/theory/pod-simple.git',
           homepage   => 'http://search.cpan.org/dist/Pod-Simple/',
-          bugtracker => 'mailto:bug-pod-simple@rt.cpan.org',
+#         bugtracker => 'bug-pod-simple@rt.cpan.org',
           license    => 'http://dev.perl.org/licenses/',
 
       },

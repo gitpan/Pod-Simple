@@ -37,4 +37,4 @@ resources:
   homepage: http://search.cpan.org/dist/Pod-Simple/
   license: http://dev.perl.org/licenses/
   repository: git://github.com/theory/pod-simple.git
-version: 3.23
+version: 3.24
