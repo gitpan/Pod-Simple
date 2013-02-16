@@ -23,7 +23,7 @@ use integer; # vroom!
 use strict;
 use Carp ();
 use vars qw($VERSION );
-$VERSION = '3.24';
+$VERSION = '3.25';
 #use constant DEBUG => 7;
 BEGIN {
   require Pod::Simple;
@@ -661,11 +661,9 @@ sub _ponder_paragraph_buffer {
           if($item_type eq 'text') {
             # Nothing special needs doing for 'text'
           } elsif($item_type eq 'number' or $item_type eq 'bullet') {
-            die "Unknown item type $item_type"
-             unless $item_type eq 'number' or $item_type eq 'bullet';
             $self->whine(
               $para->[1]{'start_line'},
-              "Expected text matching /\\s+[^\\*\\d]/ after '=item'"
+              "Expected text after =item, not a $item_type"
             );
             # Undo our clobbering:
             push @$para, $para->[1]{'~orig_content'};
@@ -1273,11 +1271,9 @@ sub _ponder_item {
     if($item_type eq 'text') {
       # Nothing special needs doing for 'text'
     } elsif($item_type eq 'number' or $item_type eq 'bullet') {
-      die "Unknown item type $item_type"
-       unless $item_type eq 'number' or $item_type eq 'bullet';
       $self->whine(
           $para->[1]{'start_line'},
-          "Expected text matching /\\s+[^\\*\\d]/ after '=item'"
+          "Expected text after =item, not a $item_type"
       );
       # Undo our clobbering:
       push @$para, $para->[1]{'~orig_content'};
