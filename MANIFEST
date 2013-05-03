@@ -188,6 +188,7 @@ t/testlib3/squaa/Vliff.pm
 t/tiedfh.t
 t/verb_fmt.t
 t/verbatim.t
+t/whine.t
 t/x_nixer.t
 t/xhtml-bkb.t
 t/xhtml01.t
